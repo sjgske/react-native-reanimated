@@ -1,3 +1,1 @@
-# Boilerplate
-
-React Native Expo + TypeScript + React Navigation + Recoil + axios ...
+# React Native Gesture Handler / Reanimated
