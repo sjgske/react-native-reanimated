@@ -1,19 +1,31 @@
 import { Suspense } from 'react';
-import { RecoilRoot } from 'recoil';
 import { ErrorBoundary } from 'react-error-boundary';
 import Navigation from './Navigation';
-import Loading from './src/screens/Loading';
-import Error from './src/screens/Error';
+import { SafeAreaView, Text } from 'react-native';
+
+const Error = () => {
+  return (
+    <SafeAreaView>
+      <Text>Error</Text>
+    </SafeAreaView>
+  );
+};
+
+const Loading = () => {
+  return (
+    <SafeAreaView>
+      <Text>Loading</Text>
+    </SafeAreaView>
+  );
+};
 
 const App = () => {
   return (
-    <RecoilRoot>
-      <ErrorBoundary fallback={<Error />}>
-        <Suspense fallback={<Loading />}>
-          <Navigation />
-        </Suspense>
-      </ErrorBoundary>
-    </RecoilRoot>
+    <ErrorBoundary fallback={<Error />}>
+      <Suspense fallback={<Loading />}>
+        <Navigation />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 

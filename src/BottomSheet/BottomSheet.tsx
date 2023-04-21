@@ -1,4 +1,10 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+} from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -42,21 +48,25 @@ const BottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
     ]);
 
     const context = useSharedValue({ y: 0 });
-    const gesture = Gesture.Pan()
-      .onStart(() => {
-        context.value = { y: translateY.value }; // 이전 값을 저장
-      })
-      .onUpdate(e => {
-        translateY.value = e.translationY + context.value.y;
-        translateY.value = Math.max(translateY.value, MAX_TRANSLATE_Y);
-      })
-      .onEnd(() => {
-        if (translateY.value > -SCREEN_HEIGHT / 3) {
-          scrollTo(-50);
-        } else if (translateY.value < SCREEN_HEIGHT / 2) {
-          scrollTo(MAX_TRANSLATE_Y + 50);
-        }
-      });
+    const gesture = useMemo(
+      () =>
+        Gesture.Pan()
+          .onStart(() => {
+            context.value = { y: translateY.value }; // 이전 값을 저장
+          })
+          .onUpdate(e => {
+            translateY.value = e.translationY + context.value.y;
+            translateY.value = Math.max(translateY.value, MAX_TRANSLATE_Y);
+          })
+          .onEnd(() => {
+            if (translateY.value > -SCREEN_HEIGHT / 3) {
+              scrollTo(-50);
+            } else if (translateY.value < SCREEN_HEIGHT / 2) {
+              scrollTo(MAX_TRANSLATE_Y + 50);
+            }
+          }),
+      [scrollTo],
+    );
 
     useEffect(() => {
       scrollTo(-SCREEN_HEIGHT / 3);

@@ -1,14 +1,16 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './src/screens/Home';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import BottomSheetScreen from './src/BottomSheet/BottomSheetScreen';
+import TarotScreen from './src/Tarot/TarotScreen';
 
 const Navigation = () => {
-  const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={Home} />
-      </Stack.Navigator>
+      <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Screen name="BottomSheet" component={BottomSheetScreen} />
+        <Tab.Screen name="Tarot" component={TarotScreen} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };

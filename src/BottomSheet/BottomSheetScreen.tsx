@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import BottomSheet, { BottomSheetRefProps } from '../components/BottomSheet';
+import BottomSheet, { BottomSheetRefProps } from './BottomSheet';
 import { useCallback, useRef } from 'react';
 
-const Home = () => {
+const BottomSheetScreen = () => {
   const ref = useRef<BottomSheetRefProps>(null);
   const onPress = useCallback(() => {
     const isActive = ref?.current?.isActive();
@@ -27,7 +27,7 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default BottomSheetScreen;
 
 const styles = StyleSheet.create({
   container: {
