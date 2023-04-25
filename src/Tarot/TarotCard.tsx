@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View, StyleSheet, Dimensions, Image } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -66,26 +66,34 @@ const Card = ({ card, index, shuffleBack }: CardProps) => {
     );
   }, [index, rotateZ, theta, y]);
 
-  const gesture = Gesture.Pan()
-    .onBegin(() => {
-      context.value = { x: x.value, y: y.value }; // 이전 값을 저장
-      scale.value = withTiming(1.1, { easing: Easing.inOut(Easing.ease) });
-      rotateZ.value = withTiming(0, { easing: Easing.inOut(Easing.ease) });
-    })
-    .onUpdate(e => {
-      x.value = e.translationX + context.value.x;
-      y.value = e.translationY + context.value.y;
-    })
-    .onEnd(e => {
-      const destination = snapPoint(x.value, e.velocityX, SNAP_POINTS);
-      x.value = withSpring(destination, { velocity: e.velocityX });
-      y.value = withSpring(0, { velocity: e.velocityY });
-      scale.value = withTiming(1, { easing: Easing.inOut(Easing.ease) }, () => {
-        if (index === 0 && destination !== 0) {
-          shuffleBack.value = true;
-        }
-      });
-    });
+  const gesture = useMemo(
+    () =>
+      Gesture.Pan()
+        .onBegin(() => {
+          context.value = { x: x.value, y: y.value }; // 이전 값을 저장
+          scale.value = withTiming(1.1, { easing: Easing.inOut(Easing.ease) });
+          rotateZ.value = withTiming(0, { easing: Easing.inOut(Easing.ease) });
+        })
+        .onUpdate(e => {
+          x.value = e.translationX + context.value.x;
+          y.value = e.translationY + context.value.y;
+        })
+        .onEnd(e => {
+          const destination = snapPoint(x.value, e.velocityX, SNAP_POINTS);
+          x.value = withSpring(destination, { velocity: e.velocityX });
+          y.value = withSpring(0, { velocity: e.velocityY });
+          scale.value = withTiming(
+            1,
+            { easing: Easing.inOut(Easing.ease) },
+            () => {
+              if (index === 0 && destination !== 0) {
+                shuffleBack.value = true;
+              }
+            },
+          );
+        }),
+    [],
+  );
 
   const style = useAnimatedStyle(() => ({
     transform: [

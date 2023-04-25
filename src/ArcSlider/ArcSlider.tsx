@@ -13,7 +13,10 @@ import {
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-import { useSharedValue } from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { polar2Canvas } from 'react-native-redash';
 
 const { width, height } = Dimensions.get('window');
@@ -96,6 +99,12 @@ const ArcSliderScreen = () => {
     movableCy,
   );
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    height: 200,
+    width: 300,
+    opacity: percentComplete.value,
+  }));
+
   if (!skiaBackgroundPath || !skiaForegroundPath) {
     return <View />;
   }
@@ -104,9 +113,15 @@ const ArcSliderScreen = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={gesture}>
         <View style={styles.container}>
-          <View style={styles.ghost} />
+          <View style={styles.ghost}>
+            <Animated.Image
+              source={require('./ghost.png')}
+              style={animatedStyle}
+              resizeMode={'center'}
+            />
+          </View>
           <Canvas style={styles.canvas}>
-            {/* <Rect x={0} y={0} width={width} height={height} color="black" /> */}
+            <Rect x={0} y={0} width={width} height={height} color="black" />
             <Path
               path={skiaBackgroundPath}
               strokeWidth={strokeWidth}
@@ -146,6 +161,7 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'black',
   },
 });
 
